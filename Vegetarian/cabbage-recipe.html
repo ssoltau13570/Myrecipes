@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Turmeric Coconut Braised Cabbage</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #fdf6ec;
@@ -20,13 +19,15 @@
     --pink-light: #f2b5c0;
     --text: #2c1a10;
     --text-light: #8a6a55;
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   }
 
 - { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
 background: var(–cream);
-font-family: ‘DM Sans’, sans-serif;
+font-family: var(–font-sans);
 color: var(–text);
 min-height: 100vh;
 padding: 2rem 1rem;
@@ -80,7 +81,7 @@ margin-bottom: 1rem;
 }
 
 .header h1 {
-font-family: ‘Playfair Display’, serif;
+font-family: var(–font-serif);
 font-size: clamp(1.6rem, 4vw, 2.4rem);
 color: var(–cream);
 line-height: 1.2;
@@ -185,7 +186,7 @@ text-align: center;
 
 /* Sections */
 .section-title {
-font-family: ‘Playfair Display’, serif;
+font-family: var(–font-serif);
 font-size: 1.1rem;
 color: var(–brown);
 margin: 2rem 0 1rem;
@@ -321,7 +322,7 @@ font-size: 0.8rem;
 font-weight: 500;
 cursor: pointer;
 transition: all 0.2s;
-font-family: ‘DM Sans’, sans-serif;
+font-family: var(–font-sans);
 }
 
 .timer-btn:hover { background: var(–turmeric); color: white; }
@@ -494,40 +495,6 @@ function renderIngredients() {
   grid.innerHTML = html;
 }
 
-let audioCtx = null;
-
-function unlockAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  // Play a silent buffer — this is the key trick to unlock Safari
-  const buf = audioCtx.createBuffer(1, 1, 22050);
-  const src = audioCtx.createBufferSource();
-  src.buffer = buf;
-  src.connect(audioCtx.destination);
-  src.start(0);
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-}
-
-function playChime() {
-  if (!audioCtx) return;
-  const notes = [523.25, 659.25, 783.99, 1046.50];
-  notes.forEach((freq, i) => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    const start = audioCtx.currentTime + i * 0.18;
-    gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(0.35, start + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
-    osc.start(start);
-    osc.stop(start + 0.8);
-  });
-}
-
 function formatTime(secs) {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
@@ -560,7 +527,6 @@ function startTimer(idx, totalSecs) {
         btn.classList.add('done');
         display.textContent = '0:00';
         document.getElementById(`step-${idx}`).classList.add('active');
-        playChime();
       }
     }, 1000),
     paused: false,
@@ -569,7 +535,6 @@ function startTimer(idx, totalSecs) {
 }
 
 function toggleTimer(idx, totalSecs) {
-  unlockAudio(); // called during tap — Safari requires this
   const btn = document.getElementById(`timer-btn-${idx}`);
   const display = document.getElementById(`timer-display-${idx}`);
 
@@ -616,7 +581,6 @@ function startTimerFrom(idx, remaining) {
         btn.classList.remove('running');
         btn.classList.add('done');
         display.textContent = '0:00';
-        playChime();
       }
     }, 1000),
     remaining
