@@ -5,65 +5,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Recipe Collection</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #fdf6ec;
-    --warm-white: #fffaf4;
-    --turmeric: #e8a020;
-    --turmeric-light: #f5c860;
-    --coconut: #f9efe0;
-    --brown: #3d2b1f;
-    --brown-mid: #7a4f35;
-    --green: #4a7c59;
-    --pink: #d4607a;
-    --pink-light: #f2b5c0;
-    --text: #2c1a10;
-    --text-light: #8a6a55;
-  }
-
-- { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-background: var(–cream);
-font-family: ‘DM Sans’, sans-serif;
-color: var(–text);
+background-color: #fdf6ec;
+font-family: ‘DM Sans’, Georgia, sans-serif;
+color: #2c1a10;
 min-height: 100vh;
 }
 
-/* Hero */
 .hero {
-background: var(–brown);
+background-color: #3d2b1f;
 padding: 3.5rem 2rem 3rem;
 text-align: center;
 position: relative;
 overflow: hidden;
 }
 
-.hero::before {
-content: ‘’;
+.hero-blob1 {
 position: absolute;
 top: -60px; right: -60px;
 width: 280px; height: 280px;
-background: var(–turmeric);
+background-color: #e8a020;
 border-radius: 50%;
 opacity: 0.12;
+pointer-events: none;
 }
 
-.hero::after {
-content: ‘’;
+.hero-blob2 {
 position: absolute;
 bottom: -80px; left: -30px;
 width: 220px; height: 220px;
-background: var(–pink);
+background-color: #d4607a;
 border-radius: 50%;
 opacity: 0.09;
+pointer-events: none;
 }
 
 .hero-label {
 display: inline-block;
-background: var(–turmeric);
-color: var(–brown);
+background-color: #e8a020;
+color: #3d2b1f;
 font-size: 0.68rem;
 font-weight: 500;
 letter-spacing: 0.14em;
@@ -76,9 +62,9 @@ z-index: 1;
 }
 
 .hero h1 {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(2rem, 5vw, 3rem);
-color: var(–cream);
+font-family: ‘Playfair Display’, Georgia, serif;
+font-size: 2.8rem;
+color: #fdf6ec;
 line-height: 1.15;
 margin-bottom: 0.7rem;
 position: relative;
@@ -86,12 +72,12 @@ z-index: 1;
 }
 
 .hero h1 em {
-color: var(–turmeric-light);
+color: #f5c860;
 font-style: italic;
 }
 
-.hero p {
-color: var(–pink-light);
+.hero-sub {
+color: #f2b5c0;
 font-size: 0.9rem;
 font-weight: 300;
 position: relative;
@@ -99,55 +85,54 @@ z-index: 1;
 }
 
 .hero-count {
-margin-top: 1.5rem;
 display: inline-flex;
 align-items: center;
-gap: 1.5rem;
-background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.1);
+margin-top: 1.8rem;
+border: 1px solid rgba(255,255,255,0.15);
 border-radius: 40px;
-padding: 0.6rem 1.5rem;
+background-color: rgba(255,255,255,0.06);
 position: relative;
 z-index: 1;
+overflow: hidden;
 }
 
 .hero-stat {
 display: flex;
 flex-direction: column;
 align-items: center;
-gap: 0.1rem;
+gap: 0.2rem;
+padding: 0.7rem 1.8rem;
 }
 
 .hero-stat-num {
-font-size: 1.1rem;
+font-size: 1.2rem;
 font-weight: 600;
-color: var(–turmeric-light);
+color: #f5c860;
+line-height: 1;
 }
 
 .hero-stat-label {
-font-size: 0.65rem;
+font-size: 0.62rem;
 text-transform: uppercase;
-letter-spacing: 0.1em;
-color: rgba(255,255,255,0.4);
+letter-spacing: 0.12em;
+color: rgba(255,255,255,0.45);
+line-height: 1;
 }
 
 .hero-divider {
 width: 1px;
-height: 30px;
-background: rgba(255,255,255,0.15);
+height: 32px;
+background-color: rgba(255,255,255,0.15);
+flex-shrink: 0;
 }
 
-/* Main */
 .main {
 max-width: 900px;
 margin: 0 auto;
 padding: 2.5rem 1.5rem;
 }
 
-/* Category section */
-.category {
-margin-bottom: 3rem;
-}
+.category { margin-bottom: 3rem; }
 
 .category-header {
 display: flex;
@@ -157,34 +142,34 @@ margin-bottom: 1.2rem;
 }
 
 .category-title {
-font-family: ‘Playfair Display’, serif;
+font-family: ‘Playfair Display’, Georgia, serif;
 font-size: 1.3rem;
-color: var(–brown);
+color: #3d2b1f;
+white-space: nowrap;
 }
 
 .category-line {
 flex: 1;
 height: 1.5px;
-background: linear-gradient(to right, var(–turmeric-light), transparent);
+background: linear-gradient(to right, #f5c860, transparent);
 }
 
 .category-count {
 font-size: 0.72rem;
 text-transform: uppercase;
 letter-spacing: 0.1em;
-color: var(–text-light);
+color: #8a6a55;
+white-space: nowrap;
 }
 
-/* Recipe cards grid */
 .cards-grid {
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 gap: 1rem;
 }
 
-/* Recipe card */
 .card {
-background: var(–warm-white);
+background-color: #fffaf4;
 border: 1.5px solid #ead8c0;
 border-radius: 16px;
 overflow: hidden;
@@ -198,21 +183,13 @@ flex-direction: column;
 .card:hover {
 transform: translateY(-3px);
 box-shadow: 0 8px 24px rgba(61,43,31,0.12);
-border-color: var(–turmeric);
+border-color: #e8a020;
 }
 
-.card-accent {
-height: 5px;
-background: linear-gradient(to right, var(–turmeric), var(–pink));
-}
-
-.card-accent.green {
-background: linear-gradient(to right, var(–green), var(–turmeric));
-}
-
-.card-accent.pink {
-background: linear-gradient(to right, var(–pink), var(–turmeric-light));
-}
+.card-accent { height: 5px; }
+.card-accent-green { background: linear-gradient(to right, #4a7c59, #e8a020); }
+.card-accent-pink  { background: linear-gradient(to right, #d4607a, #f5c860); }
+.card-accent-default { background: linear-gradient(to right, #e8a020, #d4607a); }
 
 .card-body {
 padding: 1.2rem;
@@ -235,24 +212,24 @@ letter-spacing: 0.08em;
 font-weight: 500;
 padding: 0.2rem 0.6rem;
 border-radius: 10px;
-background: var(–coconut);
-color: var(–brown-mid);
+background-color: #f9efe0;
+color: #7a4f35;
 }
 
-.card-tag.green { background: #e8f2eb; color: var(–green); }
-.card-tag.pink { background: #fdeef2; color: var(–pink); }
+.card-tag-green { background-color: #e8f2eb; color: #4a7c59; }
+.card-tag-pink  { background-color: #fdeef2; color: #d4607a; }
 
 .card-title {
-font-family: ‘Playfair Display’, serif;
+font-family: ‘Playfair Display’, Georgia, serif;
 font-size: 1.05rem;
-color: var(–brown);
+color: #3d2b1f;
 line-height: 1.3;
 margin-bottom: 0.5rem;
 }
 
 .card-desc {
 font-size: 0.8rem;
-color: var(–text-light);
+color: #8a6a55;
 line-height: 1.55;
 flex: 1;
 }
@@ -265,38 +242,21 @@ padding-top: 0.8rem;
 border-top: 1px solid #ead8c0;
 }
 
-.card-meta-item {
-display: flex;
-flex-direction: column;
-gap: 0.1rem;
-}
+.card-meta-item { display: flex; flex-direction: column; gap: 0.15rem; }
 
 .card-meta-label {
 font-size: 0.6rem;
 text-transform: uppercase;
 letter-spacing: 0.08em;
-color: var(–turmeric);
+color: #e8a020;
 }
 
-.card-meta-val {
-font-size: 0.78rem;
-font-weight: 500;
-color: var(–brown);
-}
+.card-meta-val { font-size: 0.78rem; font-weight: 500; color: #3d2b1f; }
 
-.card-arrow {
-margin-top: 1rem;
-font-size: 0.78rem;
-color: var(–turmeric);
-font-weight: 500;
-display: flex;
-align-items: center;
-gap: 0.3rem;
-}
+.card-arrow { margin-top: 1rem; font-size: 0.78rem; color: #e8a020; font-weight: 500; }
 
-/* Coming soon card */
 .card-empty {
-background: var(–coconut);
+background-color: #f9efe0;
 border: 1.5px dashed #d4b896;
 border-radius: 16px;
 padding: 1.5rem 1.2rem;
@@ -309,24 +269,14 @@ gap: 0.5rem;
 min-height: 160px;
 }
 
-.card-empty-icon {
-font-size: 1.5rem;
-opacity: 0.4;
-}
+.card-empty-icon { font-size: 1.5rem; opacity: 0.35; }
+.card-empty-text { font-size: 0.8rem; color: #8a6a55; font-style: italic; }
 
-.card-empty-text {
-font-size: 0.8rem;
-color: var(–text-light);
-opacity: 0.7;
-font-style: italic;
-}
-
-/* Footer */
 .footer {
 text-align: center;
 padding: 2rem 1rem;
 font-size: 0.75rem;
-color: var(–text-light);
+color: #8a6a55;
 opacity: 0.5;
 border-top: 1px solid #ead8c0;
 }
@@ -334,6 +284,7 @@ border-top: 1px solid #ead8c0;
 @media (max-width: 500px) {
 .cards-grid { grid-template-columns: 1fr; }
 .hero { padding: 2.5rem 1.2rem 2rem; }
+.hero h1 { font-size: 2rem; }
 }
 </style>
 
@@ -341,41 +292,40 @@ border-top: 1px solid #ead8c0;
 <body>
 
 <div class="hero">
+  <div class="hero-blob1"></div>
+  <div class="hero-blob2"></div>
   <div class="hero-label">🍳 Personal Collection</div>
   <h1>My <em>Recipe</em> Library</h1>
-  <p>Saved favorites, organized and ready to cook.</p>
+  <p class="hero-sub">Saved favorites, organized and ready to cook.</p>
   <div class="hero-count">
     <div class="hero-stat">
-      <span class="hero-stat-num" id="total-count">1</span>
-      <span class="hero-stat-label">Recipes</span>
+      <div class="hero-stat-num">1</div>
+      <div class="hero-stat-label">Recipes</div>
     </div>
     <div class="hero-divider"></div>
     <div class="hero-stat">
-      <span class="hero-stat-num">1</span>
-      <span class="hero-stat-label">Categories</span>
+      <div class="hero-stat-num">1</div>
+      <div class="hero-stat-label">Categories</div>
     </div>
   </div>
 </div>
 
 <div class="main">
-
-  <!-- Vegetarian -->
-
   <div class="category">
     <div class="category-header">
       <div class="category-title">🌿 Vegetarian Dishes</div>
       <div class="category-line"></div>
-      <div class="category-count">1 recipe</div>
+      <div class="category-count">1 Recipe</div>
     </div>
     <div class="cards-grid">
 
 ```
   <a class="card" href="Vegetarian/cabbage-recipe.html">
-    <div class="card-accent green"></div>
+    <div class="card-accent card-accent-green"></div>
     <div class="card-body">
       <div class="card-tags">
-        <span class="card-tag green">Vegetarian</span>
-        <span class="card-tag pink">GERD Friendly</span>
+        <span class="card-tag card-tag-green">Vegetarian</span>
+        <span class="card-tag card-tag-pink">GERD Friendly</span>
       </div>
       <div class="card-title">Turmeric Coconut Braised Cabbage with Chickpeas</div>
       <div class="card-desc">Anti-inflammatory and vegan. Served over brown rice with a homemade roasted red pepper sesame sauce.</div>
@@ -406,7 +356,6 @@ border-top: 1px solid #ead8c0;
 ```
 
   </div>
-
 </div>
 
 <div class="footer">My Recipe Collection · Built with Claude</div>
