@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turmeric Coconut Braised Cabbage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6ec;
+    --warm-white: #fffaf4;
+    --turmeric: #e8a020;
+    --turmeric-light: #f5c860;
+    --coconut: #f9efe0;
+    --brown: #3d2b1f;
+    --brown-mid: #7a4f35;
+    --green: #4a7c59;
+    --pink: #d4607a;
+    --pink-light: #f2b5c0;
+    --text: #2c1a10;
+    --text-light: #8a6a55;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    background: var(--brown);
+    border-radius: 20px 20px 0 0;
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: var(--turmeric);
+    border-radius: 50%;
+    opacity: 0.15;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 20px;
+    width: 150px; height: 150px;
+    background: var(--pink);
+    border-radius: 50%;
+    opacity: 0.1;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--turmeric);
+    color: var(--brown);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header p {
+    color: var(--pink-light);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .meta-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--turmeric-light);
+  }
+
+  .meta-value {
+    font-size: 0.95rem;
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  /* Body */
+  .body {
+    background: var(--warm-white);
+    padding: 0 2.5rem 2.5rem;
+    border-radius: 0 0 20px 20px;
+    border: 1px solid #ead8c0;
+    border-top: none;
+  }
+
+  /* Servings */
+  .servings-bar {
+    background: var(--coconut);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .servings-label {
+    font-size: 0.85rem;
+    color: var(--brown-mid);
+    font-weight: 500;
+  }
+
+  .servings-control {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .servings-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--turmeric);
+    background: white;
+    color: var(--turmeric);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .servings-btn:hover { background: var(--turmeric); color: white; }
+
+  .servings-num {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown);
+    min-width: 2rem;
+    text-align: center;
+  }
+
+  /* Sections */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--brown);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--turmeric-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Ingredients */
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .ingredients-grid { grid-template-columns: 1fr; }
+    .body { padding: 0 1.2rem 1.5rem; }
+    .header { padding: 1.8rem 1.2rem 1.5rem; }
+  }
+
+  .ingredient {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    background: var(--coconut);
+    font-size: 0.85rem;
+  }
+
+  .ingredient-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--turmeric);
+    margin-top: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .ingredient-dot.pink { background: var(--pink); }
+
+  .ingredient-amount {
+    font-weight: 600;
+    color: var(--brown);
+    white-space: nowrap;
+  }
+
+  .ingredient-name { color: var(--text-light); }
+
+  .sauce-label {
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--pink);
+    font-weight: 500;
+    margin-top: 0.5rem;
+    padding: 0 0.2rem;
+  }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 1rem; }
+
+  .step {
+    border-radius: 12px;
+    border: 1.5px solid #ead8c0;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .step.active { border-color: var(--turmeric); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: white;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--brown);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step.active .step-num { background: var(--turmeric); }
+
+  .step-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    flex: 1;
+    color: var(--brown);
+  }
+
+  .step-body {
+    padding: 0 1.2rem 1rem;
+    background: white;
+  }
+
+  .step-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* Timer */
+  .timer-wrap {
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .timer-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--turmeric);
+    background: white;
+    color: var(--turmeric);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .timer-btn:hover { background: var(--turmeric); color: white; }
+  .timer-btn.running { background: var(--turmeric); color: white; }
+  .timer-btn.done { background: var(--green); color: white; border-color: var(--green); }
+
+  .timer-icon { font-size: 0.85rem; }
+
+  .timer-display {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brown);
+    font-variant-numeric: tabular-nums;
+    min-width: 55px;
+    display: none;
+  }
+
+  .timer-display.visible { display: block; }
+
+  /* Notes */
+  .notes-box {
+    background: #fff5f7;
+    border: 1.5px solid var(--pink-light);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .notes-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--pink);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .notes-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.7;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="tag">🌿 Vegetarian · GERD Friendly</div>
+    <h1>Turmeric Coconut Braised Cabbage with Chickpeas</h1>
+    <p>Anti-inflammatory and vegan. Served over brown rice with a homemade roasted red pepper sesame sauce — no tahini needed!</p>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">Serves</span><span class="meta-value" id="servings-display">4</span></div>
+      <div class="meta-item"><span class="meta-label">Prep</span><span class="meta-value">15 min</span></div>
+      <div class="meta-item"><span class="meta-label">Cook</span><span class="meta-value">35 min</span></div>
+      <div class="meta-item"><span class="meta-label">Total</span><span class="meta-value">~50 min</span></div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="servings-bar">
+      <span class="servings-label">Adjust servings</span>
+      <div class="servings-control">
+        <button class="servings-btn" onclick="changeServings(-1)">−</button>
+        <span class="servings-num" id="servings-num">4</span>
+        <button class="servings-btn" onclick="changeServings(1)">+</button>
+      </div>
+    </div>
+
+    <div class="section-title">🥬 Ingredients</div>
+    <div class="ingredients-grid" id="ingredients-grid">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="section-title">👩‍🍳 Steps</div>
+    <div class="steps" id="steps-list">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="notes-box">
+      <div class="notes-title">✏️ Personal Notes</div>
+      <div class="notes-text">Braise for 15 minutes for wedges that hold their shape better. Raw red pepper works great for the sauce — add a pinch of smoked paprika to mimic that roasted flavor. Skip the serrano chile for GERD. Go easy on the lime. Leftovers are great the next day for lunch — reheat and add a soft boiled egg on top!</div>
+    </div>
+  </div>
+
+  <div class="footer">Saved from Claude · Your Vegetarian Recipes Collection</div>
+</div>
+
+<script>
+let baseServings = 4;
+let currentServings = 4;
+const timers = {};
+
+const ingredients = [
+  { amount: 0.5, unit: 'head', name: 'green cabbage, cut into 4 wedges', sauce: false },
+  { amount: 2, unit: '', name: 'shallots, finely chopped', sauce: false },
+  { amount: 1, unit: "1\"", name: 'piece fresh ginger, finely chopped', sauce: false },
+  { amount: 2, unit: '', name: 'garlic cloves, finely chopped', sauce: false },
+  { amount: 3, unit: 'tbsp', name: 'extra virgin olive oil, divided', sauce: false },
+  { amount: 1, unit: 'can', name: 'unsweetened coconut milk (13.5 oz)', sauce: false },
+  { amount: 1, unit: 'can', name: 'chickpeas, rinsed (15.5 oz)', sauce: false },
+  { amount: 1, unit: 'tsp', name: 'brown mustard seeds', sauce: false },
+  { amount: 1, unit: 'tsp', name: 'ground cumin', sauce: false },
+  { amount: 1, unit: 'tsp', name: 'turmeric powder', sauce: false },
+  { amount: 0.5, unit: 'cup', name: 'low sodium vegetable broth', sauce: false },
+  { amount: 1, unit: 'tsp', name: 'kosher salt', sauce: false },
+  { amount: 2, unit: 'cups', name: 'brown rice, cooked (for serving)', sauce: false },
+  { amount: null, unit: '', name: 'cilantro & lime wedges (for serving)', sauce: false },
+  { amount: 1, unit: '', name: 'red pepper (raw or roasted), chopped', sauce: true },
+  { amount: 2, unit: 'tbsp', name: 'sesame seeds, toasted', sauce: true },
+  { amount: 1, unit: '', name: 'garlic clove', sauce: true },
+  { amount: 2, unit: 'tbsp', name: 'olive oil', sauce: true },
+  { amount: 2, unit: 'tbsp', name: 'water', sauce: true },
+  { amount: 0.25, unit: 'tsp', name: 'ground cumin', sauce: true },
+  { amount: null, unit: '', name: 'pinch of smoked paprika', sauce: true },
+  { amount: null, unit: '', name: 'pinch of salt', sauce: true },
+];
+
+const steps = [
+  { title: 'Prep ingredients', text: 'Slice the cabbage through the core into 4 wedges. Finely chop the shallots, ginger, and garlic. Set aside.', timer: null },
+  { title: 'Toast sesame seeds', text: 'In a small dry pan over medium heat, toast the sesame seeds for 2–3 minutes, stirring often, until golden and fragrant. Remove from heat immediately and set aside for the sauce.', timer: 180 },
+  { title: 'Char the cabbage', text: 'Heat 2 tbsp olive oil in a large skillet or Dutch oven over medium-high. Add cabbage wedges cut side down, season with salt. Cook undisturbed until lightly charred, about 5 minutes. Flip and char the other side another 5 minutes. Transfer to a plate.', timer: 600 },
+  { title: 'Build the sauce base', text: 'Add remaining 1 tbsp olive oil to the same pan over medium-high. Add shallots, ginger, and garlic. Cook stirring until fragrant, about 1 minute.', timer: 60 },
+  { title: 'Bloom the spices', text: 'Add the mustard seeds, cumin, and turmeric. Stir constantly until the mustard seeds start popping, about 1 minute.', timer: 60 },
+  { title: 'Add liquids', text: 'Pour in the coconut milk, chickpeas, and broth. Stir to combine. Nestle the charred cabbage wedges back into the pan and baste them with the coconut mixture. Bring to a boil.', timer: 300 },
+  { title: 'Braise', text: 'Cover, reduce heat to low, and cook for 15 minutes until cabbage is tender but still holding its shape. Check with a fork — it should go in easily. Taste and season with salt and black pepper.', timer: 900 },
+  { title: 'Make the pink sauce', text: 'Blend the red pepper, toasted sesame seeds, garlic clove, olive oil, water, cumin, smoked paprika, and a pinch of salt together until smooth and creamy. It should be a beautiful reddish-pink. Add a splash more water if too thick.', timer: null },
+  { title: 'Serve', text: 'Scoop brown rice into bowls. Top with cabbage wedges and chickpeas. Drizzle the pink sesame sauce generously over everything. Finish with cilantro and a little lime — go easy on the lime if your stomach is still sensitive!', timer: null },
+];
+
+function formatAmount(val, servings) {
+  if (val === null) return '';
+  const scaled = val * (servings / baseServings);
+  if (scaled === Math.floor(scaled)) return scaled.toString();
+  const fracs = [[1,4],[1,3],[1,2],[2,3],[3,4]];
+  for (const [n,d] of fracs) {
+    if (Math.abs(scaled - n/d) < 0.01) return `${n}/${d}`;
+  }
+  return parseFloat(scaled.toFixed(1)).toString();
+}
+
+function renderIngredients() {
+  const grid = document.getElementById('ingredients-grid');
+  let html = '';
+  let sauceLabelAdded = false;
+  for (const ing of ingredients) {
+    if (ing.sauce && !sauceLabelAdded) {
+      html += `<div class="sauce-label">🌸 For the Pink Sauce</div>`;
+      sauceLabelAdded = true;
+    }
+    const amt = ing.amount !== null ? `<span class="ingredient-amount">${formatAmount(ing.amount, currentServings)} ${ing.unit}</span> ` : '';
+    html += `<div class="ingredient">
+      <div class="ingredient-dot ${ing.sauce ? 'pink' : ''}"></div>
+      <div>${amt}<span class="ingredient-name">${ing.name}</span></div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function startTimer(idx, totalSecs) {
+  if (timers[idx]) {
+    clearInterval(timers[idx].interval);
+    delete timers[idx];
+  }
+
+  const btn = document.getElementById(`timer-btn-${idx}`);
+  const display = document.getElementById(`timer-display-${idx}`);
+  let remaining = totalSecs;
+
+  display.classList.add('visible');
+  display.textContent = formatTime(remaining);
+  btn.classList.add('running');
+  btn.textContent = '⏸ Pause';
+
+  timers[idx] = {
+    interval: setInterval(() => {
+      remaining--;
+      display.textContent = formatTime(remaining);
+      if (remaining <= 0) {
+        clearInterval(timers[idx].interval);
+        btn.textContent = '✓ Done!';
+        btn.classList.remove('running');
+        btn.classList.add('done');
+        display.textContent = '0:00';
+        document.getElementById(`step-${idx}`).classList.add('active');
+      }
+    }, 1000),
+    paused: false,
+    remaining
+  };
+}
+
+function toggleTimer(idx, totalSecs) {
+  const btn = document.getElementById(`timer-btn-${idx}`);
+  const display = document.getElementById(`timer-display-${idx}`);
+
+  if (btn.classList.contains('done')) {
+    btn.classList.remove('done');
+    btn.textContent = `⏱ ${formatTime(totalSecs)}`;
+    display.classList.remove('visible');
+    return;
+  }
+
+  if (!timers[idx]) {
+    startTimer(idx, totalSecs);
+    document.getElementById(`step-${idx}`).classList.add('active');
+  } else {
+    clearInterval(timers[idx].interval);
+    const remaining = timers[idx].remaining;
+    delete timers[idx];
+    btn.classList.remove('running');
+    btn.textContent = `▶ Resume (${formatTime(remaining)})`;
+    timers[idx] = { paused: true, remaining };
+
+    btn.onclick = () => {
+      clearInterval(timers[idx] && timers[idx].interval);
+      startTimerFrom(idx, remaining);
+    };
+  }
+}
+
+function startTimerFrom(idx, remaining) {
+  const btn = document.getElementById(`timer-btn-${idx}`);
+  const display = document.getElementById(`timer-display-${idx}`);
+  display.classList.add('visible');
+  btn.classList.add('running');
+  btn.textContent = '⏸ Pause';
+
+  timers[idx] = {
+    interval: setInterval(() => {
+      remaining--;
+      timers[idx].remaining = remaining;
+      display.textContent = formatTime(remaining);
+      if (remaining <= 0) {
+        clearInterval(timers[idx].interval);
+        btn.textContent = '✓ Done!';
+        btn.classList.remove('running');
+        btn.classList.add('done');
+        display.textContent = '0:00';
+      }
+    }, 1000),
+    remaining
+  };
+
+  btn.onclick = () => toggleTimer(idx, remaining);
+}
+
+function renderSteps() {
+  const list = document.getElementById('steps-list');
+  list.innerHTML = steps.map((step, i) => `
+    <div class="step" id="step-${i}">
+      <div class="step-header">
+        <div class="step-num">${i + 1}</div>
+        <div class="step-title">${step.title}</div>
+      </div>
+      <div class="step-body">
+        <div class="step-text">${step.text}</div>
+        ${step.timer ? `
+        <div class="timer-wrap">
+          <button class="timer-btn" id="timer-btn-${i}" onclick="toggleTimer(${i}, ${step.timer})">
+            <span class="timer-icon">⏱</span> ${formatTime(step.timer)}
+          </button>
+          <span class="timer-display" id="timer-display-${i}"></span>
+        </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeServings(delta) {
+  const next = currentServings + delta;
+  if (next < 1 || next > 20) return;
+  currentServings = next;
+  document.getElementById('servings-num').textContent = currentServings;
+  document.getElementById('servings-display').textContent = currentServings;
+  renderIngredients();
+}
+
+renderIngredients();
+renderSteps();
+</script>
+</body>
+</html>

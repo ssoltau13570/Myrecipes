@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recipe Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6ec;
+    --warm-white: #fffaf4;
+    --turmeric: #e8a020;
+    --turmeric-light: #f5c860;
+    --coconut: #f9efe0;
+    --brown: #3d2b1f;
+    --brown-mid: #7a4f35;
+    --green: #4a7c59;
+    --pink: #d4607a;
+    --pink-light: #f2b5c0;
+    --text: #2c1a10;
+    --text-light: #8a6a55;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Hero */
+  .hero {
+    background: var(--brown);
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: var(--turmeric);
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -30px;
+    width: 220px; height: 220px;
+    background: var(--pink);
+    border-radius: 50%;
+    opacity: 0.09;
+  }
+
+  .hero-label {
+    display: inline-block;
+    background: var(--turmeric);
+    color: var(--brown);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 0.7rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 em {
+    color: var(--turmeric-light);
+    font-style: italic;
+  }
+
+  .hero p {
+    color: var(--pink-light);
+    font-size: 0.9rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-count {
+    margin-top: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 40px;
+    padding: 0.6rem 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+  .hero-stat-num {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--turmeric-light);
+  }
+
+  .hero-stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* Main */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* Category section */
+  .category {
+    margin-bottom: 3rem;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .category-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--brown);
+  }
+
+  .category-line {
+    flex: 1;
+    height: 1.5px;
+    background: linear-gradient(to right, var(--turmeric-light), transparent);
+  }
+
+  .category-count {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+  }
+
+  /* Recipe cards grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  /* Recipe card */
+  .card {
+    background: var(--warm-white);
+    border: 1.5px solid #ead8c0;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(61,43,31,0.12);
+    border-color: var(--turmeric);
+  }
+
+  .card-accent {
+    height: 5px;
+    background: linear-gradient(to right, var(--turmeric), var(--pink));
+  }
+
+  .card-accent.green {
+    background: linear-gradient(to right, var(--green), var(--turmeric));
+  }
+
+  .card-accent.pink {
+    background: linear-gradient(to right, var(--pink), var(--turmeric-light));
+  }
+
+  .card-body {
+    padding: 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .card-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    background: var(--coconut);
+    color: var(--brown-mid);
+  }
+
+  .card-tag.green { background: #e8f2eb; color: var(--green); }
+  .card-tag.pink { background: #fdeef2; color: var(--pink); }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--brown);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #ead8c0;
+  }
+
+  .card-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .card-meta-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--turmeric);
+  }
+
+  .card-meta-val {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--brown);
+  }
+
+  .card-arrow {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--turmeric);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* Coming soon card */
+  .card-empty {
+    background: var(--coconut);
+    border: 1.5px dashed #d4b896;
+    border-radius: 16px;
+    padding: 1.5rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    min-height: 160px;
+  }
+
+  .card-empty-icon {
+    font-size: 1.5rem;
+    opacity: 0.4;
+  }
+
+  .card-empty-text {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    opacity: 0.5;
+    border-top: 1px solid #ead8c0;
+  }
+
+  @media (max-width: 500px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .hero { padding: 2.5rem 1.2rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">🍳 Personal Collection</div>
+  <h1>My <em>Recipe</em> Library</h1>
+  <p>Saved favorites, organized and ready to cook.</p>
+  <div class="hero-count">
+    <div class="hero-stat">
+      <span class="hero-stat-num" id="total-count">1</span>
+      <span class="hero-stat-label">Recipes</span>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">1</span>
+      <span class="hero-stat-label">Categories</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Vegetarian -->
+  <div class="category">
+    <div class="category-header">
+      <div class="category-title">🌿 Vegetarian Dishes</div>
+      <div class="category-line"></div>
+      <div class="category-count">1 recipe</div>
+    </div>
+    <div class="cards-grid">
+
+      <a class="card" href="vegetarian/cabbage-recipe.html">
+        <div class="card-accent green"></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag green">Vegetarian</span>
+            <span class="card-tag pink">GERD Friendly</span>
+          </div>
+          <div class="card-title">Turmeric Coconut Braised Cabbage with Chickpeas</div>
+          <div class="card-desc">Anti-inflammatory and vegan. Served over brown rice with a homemade roasted red pepper sesame sauce.</div>
+          <div class="card-meta">
+            <div class="card-meta-item">
+              <span class="card-meta-label">Prep</span>
+              <span class="card-meta-val">15 min</span>
+            </div>
+            <div class="card-meta-item">
+              <span class="card-meta-label">Cook</span>
+              <span class="card-meta-val">35 min</span>
+            </div>
+            <div class="card-meta-item">
+              <span class="card-meta-label">Serves</span>
+              <span class="card-meta-val">4</span>
+            </div>
+          </div>
+          <div class="card-arrow">Open recipe →</div>
+        </div>
+      </a>
+
+      <div class="card-empty">
+        <div class="card-empty-icon">＋</div>
+        <div class="card-empty-text">More recipes coming soon…</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">My Recipe Collection · Built with Claude</div>
+
+</body>
+</html>
