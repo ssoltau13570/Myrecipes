@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,358 +22,359 @@
     --text-light: #8a6a55;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+- { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
+body {
+background: var(–cream);
+font-family: ‘DM Sans’, sans-serif;
+color: var(–text);
+min-height: 100vh;
+padding: 2rem 1rem;
+}
 
-  .page {
-    max-width: 780px;
-    margin: 0 auto;
-  }
+.page {
+max-width: 780px;
+margin: 0 auto;
+}
 
-  /* Header */
-  .header {
-    background: var(--brown);
-    border-radius: 20px 20px 0 0;
-    padding: 2.5rem 2.5rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
+/* Header */
+.header {
+background: var(–brown);
+border-radius: 20px 20px 0 0;
+padding: 2.5rem 2.5rem 2rem;
+position: relative;
+overflow: hidden;
+}
 
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    background: var(--turmeric);
-    border-radius: 50%;
-    opacity: 0.15;
-  }
+.header::before {
+content: ‘’;
+position: absolute;
+top: -40px; right: -40px;
+width: 200px; height: 200px;
+background: var(–turmeric);
+border-radius: 50%;
+opacity: 0.15;
+}
 
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; left: 20px;
-    width: 150px; height: 150px;
-    background: var(--pink);
-    border-radius: 50%;
-    opacity: 0.1;
-  }
+.header::after {
+content: ‘’;
+position: absolute;
+bottom: -60px; left: 20px;
+width: 150px; height: 150px;
+background: var(–pink);
+border-radius: 50%;
+opacity: 0.1;
+}
 
-  .tag {
-    display: inline-block;
-    background: var(--turmeric);
-    color: var(--brown);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
+.tag {
+display: inline-block;
+background: var(–turmeric);
+color: var(–brown);
+font-size: 0.7rem;
+font-weight: 500;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+padding: 0.3rem 0.8rem;
+border-radius: 20px;
+margin-bottom: 1rem;
+}
 
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    color: var(--cream);
-    line-height: 1.2;
-    margin-bottom: 0.8rem;
-    position: relative;
-    z-index: 1;
-  }
+.header h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(1.6rem, 4vw, 2.4rem);
+color: var(–cream);
+line-height: 1.2;
+margin-bottom: 0.8rem;
+position: relative;
+z-index: 1;
+}
 
-  .header p {
-    color: var(--pink-light);
-    font-size: 0.9rem;
-    font-weight: 300;
-    line-height: 1.5;
-    position: relative;
-    z-index: 1;
-  }
+.header p {
+color: var(–pink-light);
+font-size: 0.9rem;
+font-weight: 300;
+line-height: 1.5;
+position: relative;
+z-index: 1;
+}
 
-  .meta-row {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
+.meta-row {
+display: flex;
+gap: 1.5rem;
+margin-top: 1.5rem;
+flex-wrap: wrap;
+position: relative;
+z-index: 1;
+}
 
-  .meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
+.meta-item {
+display: flex;
+flex-direction: column;
+gap: 0.2rem;
+}
 
-  .meta-label {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--turmeric-light);
-  }
+.meta-label {
+font-size: 0.65rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(–turmeric-light);
+}
 
-  .meta-value {
-    font-size: 0.95rem;
-    color: var(--cream);
-    font-weight: 500;
-  }
+.meta-value {
+font-size: 0.95rem;
+color: var(–cream);
+font-weight: 500;
+}
 
-  /* Body */
-  .body {
-    background: var(--warm-white);
-    padding: 0 2.5rem 2.5rem;
-    border-radius: 0 0 20px 20px;
-    border: 1px solid #ead8c0;
-    border-top: none;
-  }
+/* Body */
+.body {
+background: var(–warm-white);
+padding: 0 2.5rem 2.5rem;
+border-radius: 0 0 20px 20px;
+border: 1px solid #ead8c0;
+border-top: none;
+}
 
-  /* Servings */
-  .servings-bar {
-    background: var(--coconut);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
+/* Servings */
+.servings-bar {
+background: var(–coconut);
+border-radius: 12px;
+padding: 1rem 1.5rem;
+margin: 1.5rem 0;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 1rem;
+flex-wrap: wrap;
+}
 
-  .servings-label {
-    font-size: 0.85rem;
-    color: var(--brown-mid);
-    font-weight: 500;
-  }
+.servings-label {
+font-size: 0.85rem;
+color: var(–brown-mid);
+font-weight: 500;
+}
 
-  .servings-control {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
+.servings-control {
+display: flex;
+align-items: center;
+gap: 0.8rem;
+}
 
-  .servings-btn {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 1.5px solid var(--turmeric);
-    background: white;
-    color: var(--turmeric);
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    font-weight: 500;
-  }
+.servings-btn {
+width: 30px; height: 30px;
+border-radius: 50%;
+border: 1.5px solid var(–turmeric);
+background: white;
+color: var(–turmeric);
+font-size: 1.1rem;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: all 0.2s;
+font-weight: 500;
+}
 
-  .servings-btn:hover { background: var(--turmeric); color: white; }
+.servings-btn:hover { background: var(–turmeric); color: white; }
 
-  .servings-num {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--brown);
-    min-width: 2rem;
-    text-align: center;
-  }
+.servings-num {
+font-size: 1.1rem;
+font-weight: 600;
+color: var(–brown);
+min-width: 2rem;
+text-align: center;
+}
 
-  /* Sections */
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--brown);
-    margin: 2rem 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--turmeric-light);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+/* Sections */
+.section-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 1.1rem;
+color: var(–brown);
+margin: 2rem 0 1rem;
+padding-bottom: 0.5rem;
+border-bottom: 2px solid var(–turmeric-light);
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
 
-  /* Ingredients */
-  .ingredients-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
+/* Ingredients */
+.ingredients-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0.5rem;
+}
 
-  @media (max-width: 500px) {
-    .ingredients-grid { grid-template-columns: 1fr; }
-    .body { padding: 0 1.2rem 1.5rem; }
-    .header { padding: 1.8rem 1.2rem 1.5rem; }
-  }
+@media (max-width: 500px) {
+.ingredients-grid { grid-template-columns: 1fr; }
+.body { padding: 0 1.2rem 1.5rem; }
+.header { padding: 1.8rem 1.2rem 1.5rem; }
+}
 
-  .ingredient {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.6rem 0.8rem;
-    border-radius: 8px;
-    background: var(--coconut);
-    font-size: 0.85rem;
-  }
+.ingredient {
+display: flex;
+align-items: flex-start;
+gap: 0.6rem;
+padding: 0.6rem 0.8rem;
+border-radius: 8px;
+background: var(–coconut);
+font-size: 0.85rem;
+}
 
-  .ingredient-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--turmeric);
-    margin-top: 0.3rem;
-    flex-shrink: 0;
-  }
+.ingredient-dot {
+width: 8px; height: 8px;
+border-radius: 50%;
+background: var(–turmeric);
+margin-top: 0.3rem;
+flex-shrink: 0;
+}
 
-  .ingredient-dot.pink { background: var(--pink); }
+.ingredient-dot.pink { background: var(–pink); }
 
-  .ingredient-amount {
-    font-weight: 600;
-    color: var(--brown);
-    white-space: nowrap;
-  }
+.ingredient-amount {
+font-weight: 600;
+color: var(–brown);
+white-space: nowrap;
+}
 
-  .ingredient-name { color: var(--text-light); }
+.ingredient-name { color: var(–text-light); }
 
-  .sauce-label {
-    grid-column: 1 / -1;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--pink);
-    font-weight: 500;
-    margin-top: 0.5rem;
-    padding: 0 0.2rem;
-  }
+.sauce-label {
+grid-column: 1 / -1;
+font-size: 0.7rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(–pink);
+font-weight: 500;
+margin-top: 0.5rem;
+padding: 0 0.2rem;
+}
 
-  /* Steps */
-  .steps { display: flex; flex-direction: column; gap: 1rem; }
+/* Steps */
+.steps { display: flex; flex-direction: column; gap: 1rem; }
 
-  .step {
-    border-radius: 12px;
-    border: 1.5px solid #ead8c0;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
+.step {
+border-radius: 12px;
+border: 1.5px solid #ead8c0;
+overflow: hidden;
+transition: border-color 0.2s;
+}
 
-  .step.active { border-color: var(--turmeric); }
+.step.active { border-color: var(–turmeric); }
 
-  .step-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    background: white;
-  }
+.step-header {
+display: flex;
+align-items: center;
+gap: 1rem;
+padding: 1rem 1.2rem;
+background: white;
+}
 
-  .step-num {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: var(--brown);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
+.step-num {
+width: 28px; height: 28px;
+border-radius: 50%;
+background: var(–brown);
+color: white;
+font-size: 0.75rem;
+font-weight: 600;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+}
 
-  .step.active .step-num { background: var(--turmeric); }
+.step.active .step-num { background: var(–turmeric); }
 
-  .step-title {
-    font-weight: 500;
-    font-size: 0.9rem;
-    flex: 1;
-    color: var(--brown);
-  }
+.step-title {
+font-weight: 500;
+font-size: 0.9rem;
+flex: 1;
+color: var(–brown);
+}
 
-  .step-body {
-    padding: 0 1.2rem 1rem;
-    background: white;
-  }
+.step-body {
+padding: 0 1.2rem 1rem;
+background: white;
+}
 
-  .step-text {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    line-height: 1.6;
-  }
+.step-text {
+font-size: 0.85rem;
+color: var(–text-light);
+line-height: 1.6;
+}
 
-  /* Timer */
-  .timer-wrap {
-    margin-top: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-  }
+/* Timer */
+.timer-wrap {
+margin-top: 0.8rem;
+display: flex;
+align-items: center;
+gap: 0.8rem;
+flex-wrap: wrap;
+}
 
-  .timer-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 1rem;
-    border-radius: 20px;
-    border: 1.5px solid var(--turmeric);
-    background: white;
-    color: var(--turmeric);
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
+.timer-btn {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.45rem 1rem;
+border-radius: 20px;
+border: 1.5px solid var(–turmeric);
+background: white;
+color: var(–turmeric);
+font-size: 0.8rem;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s;
+font-family: ‘DM Sans’, sans-serif;
+}
 
-  .timer-btn:hover { background: var(--turmeric); color: white; }
-  .timer-btn.running { background: var(--turmeric); color: white; }
-  .timer-btn.done { background: var(--green); color: white; border-color: var(--green); }
+.timer-btn:hover { background: var(–turmeric); color: white; }
+.timer-btn.running { background: var(–turmeric); color: white; }
+.timer-btn.done { background: var(–green); color: white; border-color: var(–green); }
 
-  .timer-icon { font-size: 0.85rem; }
+.timer-icon { font-size: 0.85rem; }
 
-  .timer-display {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--brown);
-    font-variant-numeric: tabular-nums;
-    min-width: 55px;
-    display: none;
-  }
+.timer-display {
+font-size: 1.1rem;
+font-weight: 700;
+color: var(–brown);
+font-variant-numeric: tabular-nums;
+min-width: 55px;
+display: none;
+}
 
-  .timer-display.visible { display: block; }
+.timer-display.visible { display: block; }
 
-  /* Notes */
-  .notes-box {
-    background: #fff5f7;
-    border: 1.5px solid var(--pink-light);
-    border-radius: 12px;
-    padding: 1.2rem;
-    margin-top: 2rem;
-  }
+/* Notes */
+.notes-box {
+background: #fff5f7;
+border: 1.5px solid var(–pink-light);
+border-radius: 12px;
+padding: 1.2rem;
+margin-top: 2rem;
+}
 
-  .notes-title {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--pink);
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-  }
+.notes-title {
+font-size: 0.7rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(–pink);
+font-weight: 600;
+margin-bottom: 0.6rem;
+}
 
-  .notes-text {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    line-height: 1.7;
-  }
+.notes-text {
+font-size: 0.85rem;
+color: var(–text-light);
+line-height: 1.7;
+}
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.75rem;
-    color: var(--text-light);
-    opacity: 0.6;
-  }
+/* Footer */
+.footer {
+text-align: center;
+margin-top: 1.5rem;
+font-size: 0.75rem;
+color: var(–text-light);
+opacity: 0.6;
+}
 </style>
+
 </head>
 <body>
 <div class="page">
@@ -390,29 +392,32 @@
 
   <div class="body">
 
-    <div class="servings-bar">
-      <span class="servings-label">Adjust servings</span>
-      <div class="servings-control">
-        <button class="servings-btn" onclick="changeServings(-1)">−</button>
-        <span class="servings-num" id="servings-num">4</span>
-        <button class="servings-btn" onclick="changeServings(1)">+</button>
-      </div>
-    </div>
+```
+<div class="servings-bar">
+  <span class="servings-label">Adjust servings</span>
+  <div class="servings-control">
+    <button class="servings-btn" onclick="changeServings(-1)">−</button>
+    <span class="servings-num" id="servings-num">4</span>
+    <button class="servings-btn" onclick="changeServings(1)">+</button>
+  </div>
+</div>
 
-    <div class="section-title">🥬 Ingredients</div>
-    <div class="ingredients-grid" id="ingredients-grid">
-      <!-- filled by JS -->
-    </div>
+<div class="section-title">🥬 Ingredients</div>
+<div class="ingredients-grid" id="ingredients-grid">
+  <!-- filled by JS -->
+</div>
 
-    <div class="section-title">👩‍🍳 Steps</div>
-    <div class="steps" id="steps-list">
-      <!-- filled by JS -->
-    </div>
+<div class="section-title">👩‍🍳 Steps</div>
+<div class="steps" id="steps-list">
+  <!-- filled by JS -->
+</div>
 
-    <div class="notes-box">
-      <div class="notes-title">✏️ Personal Notes</div>
-      <div class="notes-text">Braise for 15 minutes for wedges that hold their shape better. Raw red pepper works great for the sauce — add a pinch of smoked paprika to mimic that roasted flavor. Skip the serrano chile for GERD. Go easy on the lime. Leftovers are great the next day for lunch — reheat and add a soft boiled egg on top!</div>
-    </div>
+<div class="notes-box">
+  <div class="notes-title">✏️ Personal Notes</div>
+  <div class="notes-text">Braise for 15 minutes for wedges that hold their shape better. Raw red pepper works great for the sauce — add a pinch of smoked paprika to mimic that roasted flavor. Skip the serrano chile for GERD. Go easy on the lime. Leftovers are great the next day for lunch — reheat and add a soft boiled egg on top!</div>
+</div>
+```
+
   </div>
 
   <div class="footer">Saved from Claude · Your Vegetarian Recipes Collection</div>
@@ -489,6 +494,27 @@ function renderIngredients() {
   grid.innerHTML = html;
 }
 
+function playChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const start = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.35, start + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
+      osc.start(start);
+      osc.stop(start + 0.8);
+    });
+  } catch(e) {}
+}
+
 function formatTime(secs) {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
@@ -521,6 +547,7 @@ function startTimer(idx, totalSecs) {
         btn.classList.add('done');
         display.textContent = '0:00';
         document.getElementById(`step-${idx}`).classList.add('active');
+        playChime();
       }
     }, 1000),
     paused: false,
@@ -575,6 +602,7 @@ function startTimerFrom(idx, remaining) {
         btn.classList.remove('running');
         btn.classList.add('done');
         display.textContent = '0:00';
+        playChime();
       }
     }, 1000),
     remaining
@@ -617,5 +645,6 @@ function changeServings(delta) {
 renderIngredients();
 renderSteps();
 </script>
+
 </body>
 </html>
