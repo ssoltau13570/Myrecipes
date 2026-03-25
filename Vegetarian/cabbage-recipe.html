@@ -494,23 +494,37 @@ function renderIngredients() {
   grid.innerHTML = html;
 }
 
+// Shared AudioContext — created on first user tap so Safari unlocks it
+let audioCtx = null;
+
+function unlockAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
 function playChime() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523.25, 659.25, 783.99, 1046.50];
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const start = ctx.currentTime + i * 0.18;
-      gain.gain.setValueAtTime(0, start);
-      gain.gain.linearRampToValueAtTime(0.35, start + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
-      osc.start(start);
-      osc.stop(start + 0.8);
+    if (!audioCtx) return;
+    audioCtx.resume().then(() => {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const start = audioCtx.currentTime + i * 0.18;
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(0.35, start + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
+        osc.start(start);
+        osc.stop(start + 0.8);
+      });
     });
   } catch(e) {}
 }
@@ -556,6 +570,7 @@ function startTimer(idx, totalSecs) {
 }
 
 function toggleTimer(idx, totalSecs) {
+  unlockAudio(); // must happen during user gesture for Safari
   const btn = document.getElementById(`timer-btn-${idx}`);
   const display = document.getElementById(`timer-display-${idx}`);
 
