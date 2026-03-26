@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recipe Collection</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fdf6ec;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:#2c1a10;min-height:100vh}
+.hero{background:#3d2b1f;padding:3rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+.hblob1{position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:#e8a020;border-radius:50%;opacity:.12;pointer-events:none}
+.hblob2{position:absolute;bottom:-80px;left:-30px;width:220px;height:220px;background:#d4607a;border-radius:50%;opacity:.09;pointer-events:none}
+.hlabel{display:inline-block;background:#e8a020;color:#3d2b1f;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem;position:relative;z-index:1}
+.hero h1{font-family:Georgia,serif;font-size:2.6rem;color:#fdf6ec;line-height:1.15;margin-bottom:.6rem;position:relative;z-index:1}
+.hero h1 em{color:#f5c860;font-style:italic}
+.hero-sub{color:#f2b5c0;font-size:.88rem;font-weight:300;position:relative;z-index:1;margin-bottom:1.4rem}
+.hcount{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.15);border-radius:40px;background:rgba(255,255,255,.06);position:relative;z-index:1;overflow:hidden}
+.hstat{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.65rem 1.5rem}
+.hstat-num{font-size:1.15rem;font-weight:600;color:#f5c860;line-height:1}
+.hstat-lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);line-height:1}
+.hdiv{width:1px;height:30px;background:rgba(255,255,255,.15);flex-shrink:0}
+.sstrip{background:#2a3d2a;padding:8px 16px;display:flex;align-items:center;gap:10px;overflow:hidden}
+.sstrip-lbl{font-size:10px;font-weight:500;color:#8fb88f;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.sscroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.sscroll::-webkit-scrollbar{display:none}
+.schip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border-radius:20px;padding:3px 9px;white-space:nowrap;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+.schip:hover{background:rgba(255,255,255,.18)}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.schip-name{font-size:11px;color:#c8e6c8}
+.sticky{background:#fffaf4;border-bottom:1.5px solid #ead8c0;position:sticky;top:0;z-index:100}
+.sticky-inner{max-width:900px;margin:0 auto;padding:10px 16px 0}
+.top-row{display:flex;gap:8px;align-items:center;padding-bottom:8px;flex-wrap:wrap}
+.search-input{flex:1;min-width:120px;padding:8px 14px;border-radius:20px;border:1.5px solid #ead8c0;background:white;font-size:13px;font-family:inherit;color:#2c1a10;outline:none}
+.search-input:focus{border-color:#e8a020}
+.tbtn{padding:8px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;border:1.5px solid #ead8c0;background:white;color:#7a4f35}
+.tbtn:hover{border-color:#e8a020;color:#e8a020}
+.tbtn.active{background:#3d2b1f;border-color:#3d2b1f;color:#f5c860}
+.tbtn-meal{background:#3d2b1f;border-color:#3d2b1f;color:#f5c860}
+.tbtn-garden{background:#2a3d2a;border-color:#2a3d2a;color:#c8e6c8}
+.filter-drawer{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.filter-drawer.open{max-height:500px}
+.fdrawer-inner{padding:0 0 10px}
+.frow-lbl{font-size:10px;color:#8a6a55;text-transform:uppercase;letter-spacing:.08em;padding:6px 0 4px}
+.frow{display:flex;gap:5px;flex-wrap:wrap;padding-bottom:4px}
+.fbtn{padding:4px 10px;border-radius:20px;border:1.5px solid #ead8c0;background:white;color:#7a4f35;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
+.fbtn:hover{border-color:#e8a020;color:#e8a020}
+.fbtn.active{background:#3d2b1f;border-color:#3d2b1f;color:#f5c860}
+.fbtn.fav-btn.active{background:#d4607a;border-color:#d4607a;color:white}
+.fclear{padding:4px 10px;border-radius:20px;border:1.5px solid #d4607a;background:white;color:#d4607a;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;display:none;margin-top:6px}
+.fclear.vis{display:inline-block}
+.icon-key{display:flex;gap:10px;flex-wrap:wrap;padding:6px 16px 8px;border-top:1px solid #ead8c0;max-width:900px;margin:0 auto}
+.ik{display:flex;align-items:center;gap:3px;font-size:10px;color:#8a6a55}
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+.category{margin-bottom:2.5rem}
+.category.hidden{display:none}
+.cat-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.6rem}
+.cat-title{font-family:Georgia,serif;font-size:1.25rem;color:#3d2b1f;white-space:nowrap}
+.cat-line{flex:1;height:1.5px;background:linear-gradient(to right,#f5c860,transparent)}
+.cat-count{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#8a6a55;white-space:nowrap}
+.lnav-wrap{margin-bottom:.8rem}
+.lnav-toggle{background:none;border:none;color:#8a6a55;font-size:11px;cursor:pointer;font-family:inherit;padding:0;display:flex;align-items:center;gap:4px}
+.lnav-toggle:hover{color:#e8a020}
+.lnav-toggle span{transition:transform .2s;display:inline-block}
+.lnav-toggle.open span{transform:rotate(180deg)}
+.lnav-drawer{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.lnav-drawer.open{max-height:120px}
+.lnav-label{font-size:10px;color:#8a6a55;font-style:italic;display:block;padding:6px 0 4px}
+.lpills{display:flex;gap:5px;flex-wrap:wrap}
+.lpill{padding:3px 10px;border-radius:20px;border:1.5px solid #ead8c0;background:white;color:#7a4f35;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.lpill:hover{background:#3d2b1f;border-color:#3d2b1f;color:#f5c860}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.card{background:#fffaf4;border:1.5px solid #ead8c0;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(61,43,31,.12);border-color:#e8a020}
+.card.hidden{display:none}
+.card-body{padding:1.1rem;flex:1;display:flex;flex-direction:column}
+.card-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.card-tag{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;font-weight:500;padding:.18rem .55rem;border-radius:10px;background:#f9efe0;color:#7a4f35}
+.card-tag.fav{background:#fdeef2;color:#d4607a}
+.card-tag.veg{background:#e8f2eb;color:#4a7c59}
+.card-tag.health{background:#e8f0fb;color:#3a6bc4}
+.card-title{font-family:Georgia,serif;font-size:1rem;color:#3d2b1f;line-height:1.3;margin-bottom:.45rem}
+.card-desc{font-size:.78rem;color:#8a6a55;line-height:1.55;flex:1}
+.card-icons{display:flex;gap:4px;margin-top:.6rem;font-size:13px}
+.card-meta{display:flex;gap:.8rem;margin-top:.7rem;padding-top:.7rem;border-top:1px solid #ead8c0}
+.card-meta-item{display:flex;flex-direction:column;gap:.12rem}
+.card-meta-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:#e8a020}
+.card-meta-val{font-size:.76rem;font-weight:500;color:#3d2b1f}
+.card-arrow{margin-top:.7rem;font-size:.76rem;color:#e8a020;font-weight:500}
+.garden-section{background:#fffaf4;border:1.5px solid #ead8c0;border-radius:16px;padding:1.5rem;margin-top:1rem}
+.garden-controls{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.garden-status{font-size:11px;color:#8a6a55;font-style:italic;flex:1;min-width:160px;padding-top:2px}
+.garden-btns{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mode-toggle{display:flex;border:1.5px solid #ead8c0;border-radius:20px;overflow:hidden}
+.mode-btn{padding:4px 12px;border:none;background:white;color:#7a4f35;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.mode-btn.active{background:#3d2b1f;color:#f5c860}
+.show-btn{padding:4px 12px;border-radius:20px;border:none;background:#e8a020;color:#3d2b1f;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:none}
+.clear-btn{padding:4px 10px;border-radius:20px;border:1.5px solid #d4607a;background:white;color:#d4607a;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;display:none}
+.garden-group-lbl{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#7a4f35;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.gitem{background:#f9efe0;border-radius:10px;padding:8px 6px;text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all .15s;user-select:none}
+.gitem:hover{border-color:#e8a020}
+.gitem.selected{background:#3d2b1f;border-color:#3d2b1f}
+.gitem.selected .gname{color:#f5c860}
+.gitem.selected .gcount{color:#f2b5c0}
+.gitem-none{opacity:.45;cursor:default}
+.gemoji{font-size:18px;display:block;margin-bottom:3px}
+.gname{font-size:11px;font-weight:500;color:#3d2b1f}
+.gcount{font-size:10px;color:#8a6a55;margin-top:2px}
+.gdot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.garden-key{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
+.gkey-item{display:flex;align-items:center;gap:5px;font-size:10px;color:#8a6a55}
+.popup-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;padding:1rem}
+.popup-bg.open{display:flex}
+.popup-box{background:#fffaf4;border-radius:16px;padding:1.5rem;max-width:380px;width:100%}
+.popup-title{font-family:Georgia,serif;font-size:1.1rem;color:#3d2b1f;margin-bottom:6px}
+.popup-desc{font-size:12px;color:#7a4f35;line-height:1.6;margin-bottom:12px}
+.popup-template{background:#f9efe0;border-radius:8px;padding:10px 12px;font-size:11px;color:#5a3a20;font-family:monospace;line-height:1.7;margin-bottom:12px;white-space:pre-wrap}
+.popup-btns{display:flex;gap:8px}
+.popup-btn{flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;border:1.5px solid #ead8c0;background:white;color:#7a4f35}
+.popup-btn.go{background:#3d2b1f;color:#f5c860;border-color:#3d2b1f}
+.no-results{text-align:center;padding:3rem 1rem;color:#8a6a55;font-style:italic;display:none}
+.footer{text-align:center;padding:2rem 1rem;font-size:.75rem;color:#8a6a55;border-top:1px solid #ead8c0}
+@media(max-width:500px){.cards-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}.ggrid{grid-template-columns:repeat(3,1fr)}.top-row{gap:5px}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hblob1"></div><div class="hblob2"></div>
+  <div class="hlabel">Personal Collection</div>
+  <h1>My <em>Recipe</em> Library</h1>
+  <p class="hero-sub">Saved favorites, organized and ready to cook.</p>
+  <div class="hcount">
+    <div class="hstat"><div class="hstat-num">33</div><div class="hstat-lbl">Recipes</div></div>
+    <div class="hdiv"></div>
+    <div class="hstat"><div class="hstat-num">8</div><div class="hstat-lbl">Categories</div></div>
+    <div class="hdiv"></div>
+    <div class="hstat"><div class="hstat-num">5</div><div class="hstat-lbl">Favorites</div></div>
+    <div class="hdiv"></div>
+    <div class="hstat"><div class="hstat-num">17</div><div class="hstat-lbl">Garden Ready</div></div>
+  </div>
+</div>
+
+<div class="sstrip">
+  <span class="sstrip-lbl">Planting soon</span>
+  <div class="sscroll">
+    <div class="schip" onclick="seasonalSearch('zucchini')"><div class="sdot" style="background:#e8a020"></div><span class="schip-name">Zucchini</span></div>
+    <div class="schip" onclick="seasonalSearch('cilantro')"><div class="sdot" style="background:#e8a020"></div><span class="schip-name">Cilantro</span></div>
+    <div class="schip" onclick="seasonalSearch('parsley')"><div class="sdot" style="background:#e8a020"></div><span class="schip-name">Parsley</span></div>
+    <div class="schip" onclick="seasonalSearch('squash')"><div class="sdot" style="background:#e8a020"></div><span class="schip-name">Summer Squash</span></div>
+    <div class="schip" onclick="seasonalSearch('sage')"><div class="sdot" style="background:#e8a020"></div><span class="schip-name">Sage</span></div>
+  </div>
+</div>
+
+<div class="sticky">
+  <div class="sticky-inner">
+    <div class="top-row">
+      <input class="search-input" id="search" type="text" placeholder="Search recipes, ingredients..." oninput="doSearch()" />
+      <button class="tbtn" id="ftoggle" onclick="toggleFilters()">&#9776; Filter <span id="fcount"></span></button>
+      <button class="tbtn tbtn-meal" onclick="document.getElementById('meal-popup').classList.add('open')">&#127358; Meal Plan</button>
+      <button class="tbtn tbtn-garden" onclick="scrollToGarden()">&#127807; Garden</button>
+    </div>
+    <div class="filter-drawer" id="fdrawer">
+      <div class="fdrawer-inner">
+        <div class="frow-lbl">Dietary</div><div class="frow" id="frow-dietary"></div>
+        <div class="frow-lbl">Lifestyle</div><div class="frow" id="frow-lifestyle"></div>
+        <div class="frow-lbl">Cuisine</div><div class="frow" id="frow-cuisine"></div>
+        <button class="fclear" id="fclear" onclick="clearFilters()">Clear all filters</button>
+      </div>
+    </div>
+  </div>
+  <div class="icon-key">
+    <div class="ik"><span>&#9201;</span> Under 30 min</div>
+    <div class="ik"><span>&#x1F944;</span> Low effort</div>
+    <div class="ik"><span>&#10052;</span> Freezer friendly</div>
+    <div class="ik"><span>&#128197;</span> Meal prep</div>
+    <div class="ik"><span>&#127807;</span> Garden fresh</div>
+    <div class="ik"><span>&#127918;</span> Game night</div>
+    <div class="ik"><span>&#128690;</span> Pack friendly</div>
+  </div>
+</div>
+
+<div class="main" id="main">
+<div class="category" id="cat-vegetarian">
+  <div class="cat-header">
+    <div class="cat-title">Vegetarian Dishes</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">6 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('vegetarian','Cabbage')">Cabbage</button><button class="lpill" onclick="jumpToIng('vegetarian','Feta')">Feta</button><button class="lpill" onclick="jumpToIng('vegetarian','Pizza')">Pizza</button><button class="lpill" onclick="jumpToIng('vegetarian','Sandwich')">Sandwich</button><button class="lpill" onclick="jumpToIng('vegetarian','Veggies')">Veggies</button><button class="lpill" onclick="jumpToIng('vegetarian','White Bean')">White Bean</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-vegetarian"><a class="card" href="Vegetarian/cheesy-white-bean-bake.html" data-tags="Vegetarian,Quick,PCOS Friendly" data-ingredient="White Bean" data-title="cheesy white bean-tomato bake" data-desc="tomato paste, white beans, and mozzarella baked until bubbly and golden.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Quick</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Cheesy White Bean-Tomato Bake</div>
+    <div class="card-desc">Tomato paste, white beans, and mozzarella baked until bubbly and golden.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/kimchi-grilled-cheese.html" data-tags="Vegetarian,Quick" data-ingredient="Sandwich" data-title="kimchi grilled cheese" data-desc="kimchi and melty mozzarella on golden mayo-toasted bread.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Quick</span></div>
+    <div class="card-title">Kimchi Grilled Cheese</div>
+    <div class="card-desc">Kimchi and melty mozzarella on golden mayo-toasted bread.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">1</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/roasted-vegetables.html" data-tags="Vegetarian,Vegan,Gluten Free,GERD Friendly,PCOS Friendly" data-ingredient="Veggies" data-title="lynne's oven-roasted vegetables" data-desc="a flexible roasted vegetable medley with thyme, rosemary, and olive oil.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag veg">Vegan</span><span class="card-tag health">Gluten Free</span><span class="card-tag health">GERD Friendly</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Lynne's Oven-Roasted Vegetables</div>
+    <div class="card-desc">A flexible roasted vegetable medley with thyme, rosemary, and olive oil.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">30 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">45 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/margarita-pizza.html" data-tags="Vegetarian,Baking,Favorite" data-ingredient="Pizza" data-title="margarita pizza" data-desc="hand-stretched garlicky dough, raw sliced garlic, fresh mozzarella, campari tomatoes, and basil.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag fav">Favorite</span><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Baking</span><span class="card-tag fav">Favorite</span></div>
+    <div class="card-title">Margarita Pizza</div>
+    <div class="card-desc">Hand-stretched garlicky dough, raw sliced garlic, fresh mozzarella, Campari tomatoes, and basil.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/sheet-pan-feta.html" data-tags="Vegetarian,Quick,Gluten Free,PCOS Friendly" data-ingredient="Feta" data-title="sheet-pan baked feta with broccolini and tomatoes" data-desc="broccolini and tomatoes roasted with cumin alongside creamy baked feta.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Quick</span><span class="card-tag health">Gluten Free</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Sheet-Pan Baked Feta with Broccolini and Tomatoes</div>
+    <div class="card-desc">Broccolini and tomatoes roasted with cumin alongside creamy baked feta.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/cabbage-recipe.html" data-tags="Vegetarian,Vegan,GERD Friendly" data-ingredient="Cabbage" data-title="turmeric coconut braised cabbage with chickpeas" data-desc="anti-inflammatory and vegan over brown rice with a pink sesame sauce.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#4a7c59,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag veg">Vegan</span><span class="card-tag health">GERD Friendly</span></div>
+    <div class="card-title">Turmeric Coconut Braised Cabbage with Chickpeas</div>
+    <div class="card-desc">Anti-inflammatory and vegan over brown rice with a pink sesame sauce.</div>
+    <div class="card-icons"><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">35 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-fish">
+  <div class="cat-header">
+    <div class="cat-title">Fish</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">4 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('fish','Salmon')">Salmon</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-fish"><a class="card" href="Fish/salmon.html" data-tags="Gluten Free,Quick,PCOS Friendly,GERD Friendly" data-ingredient="Salmon" data-title="baked salmon with roasted charred veggie medley" data-desc="a perfectly timed sheet-pan dinner — veggies get a head start so everything finishes at once.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#3a6bc4,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag health">Gluten Free</span><span class="card-tag ">Quick</span><span class="card-tag health">PCOS Friendly</span><span class="card-tag health">GERD Friendly</span></div>
+    <div class="card-title">Baked Salmon with Roasted Charred Veggie Medley</div>
+    <div class="card-desc">A perfectly timed sheet-pan dinner — veggies get a head start so everything finishes at once.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">40 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Fish/horseradish-salmon.html" data-tags="Quick,GERD Friendly,PCOS Friendly" data-ingredient="Salmon" data-title="horseradish parmesan crusted salmon" data-desc="fancy-looking but incredibly easy — creamy horseradish and parmesan panko crust.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#3a6bc4,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag health">GERD Friendly</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Horseradish Parmesan Crusted Salmon</div>
+    <div class="card-desc">Fancy-looking but incredibly easy — creamy horseradish and parmesan panko crust.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">2</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Fish/two-way-salmon.html" data-tags="Quick,Gluten Free,GERD Friendly,PCOS Friendly" data-ingredient="Salmon" data-title="two way marinated salmon fillet" data-desc="two simple methods — ginger and red wine vinegar, or lemon and peppercorns.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#3a6bc4,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag health">Gluten Free</span><span class="card-tag health">GERD Friendly</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Two Way Marinated Salmon Fillet</div>
+    <div class="card-desc">Two simple methods — ginger and red wine vinegar, or lemon and peppercorns.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">25 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">2</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Fish/wasabi-panko-salmon.html" data-tags="Quick,PCOS Friendly" data-ingredient="Salmon" data-title="wasabi panko crusted salmon" data-desc="a thin layer of wasabi paste topped with crispy panko. simple, fast, and elegant.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#3a6bc4,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Wasabi Panko Crusted Salmon</div>
+    <div class="card-desc">A thin layer of wasabi paste topped with crispy panko. Simple, fast, and elegant.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">22 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">2</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-soups_salads_and_sandwiches">
+  <div class="cat-header">
+    <div class="cat-title">Soups, Salads and Sandwiches</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">3 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('soups_salads_and_sandwiches','Salad')">Salad</button><button class="lpill" onclick="jumpToIng('soups_salads_and_sandwiches','Sandwich')">Sandwich</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-soups_salads_and_sandwiches"><a class="card" href="Soups-Salads-Sandwiches/broccoli-feta-salad.html" data-tags="Vegetarian,Quick,Gluten Free,GERD Friendly,PCOS Friendly" data-ingredient="Salad" data-title="broccoli and feta salad" data-desc="lightly steamed broccoli, feta, tomatoes and red onion in a dijon vinaigrette.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Quick</span><span class="card-tag health">Gluten Free</span><span class="card-tag health">GERD Friendly</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Broccoli and Feta Salad</div>
+    <div class="card-desc">Lightly steamed broccoli, feta, tomatoes and red onion in a Dijon vinaigrette.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">1 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">5</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Soups-Salads-Sandwiches/portabella-pitas.html" data-tags="Vegetarian,Quick,PCOS Friendly" data-ingredient="Sandwich" data-title="saucy portabella pitas" data-desc="greek-spiced portobello mushrooms in warm pitas with red onion, tomato, and cucumber yogurt sauce.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Quick</span><span class="card-tag health">PCOS Friendly</span></div>
+    <div class="card-title">Saucy Portabella Pitas</div>
+    <div class="card-desc">Greek-spiced portobello mushrooms in warm pitas with red onion, tomato, and cucumber yogurt sauce.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Soups-Salads-Sandwiches/tuna-sandwich.html" data-tags="Quick,Comfort Food" data-ingredient="Sandwich" data-title="toasted tuna sandwich with warm rice" data-desc="a simple, sentimental toasted tuna sandwich served alongside warm white rice.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag ">Comfort Food</span></div>
+    <div class="card-title">Toasted Tuna Sandwich with Warm Rice</div>
+    <div class="card-desc">A simple, sentimental toasted tuna sandwich served alongside warm white rice.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">1</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-drinks">
+  <div class="cat-header">
+    <div class="cat-title">Drinks</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">1 Recipe</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('drinks','Smoothie')">Smoothie</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-drinks"><a class="card" href="Soups-Salads-Sandwiches/buff-smoothie.html" data-tags="Vegan,PCOS Friendly,GERD Friendly" data-ingredient="Smoothie" data-title="alton brown's buff smoothie" data-desc="a fruity dairy-free antioxidant smoothie with acai, banana, blueberries, and peaches.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#3a6bc4,#4a7c59)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag veg">Vegan</span><span class="card-tag health">PCOS Friendly</span><span class="card-tag health">GERD Friendly</span></div>
+    <div class="card-title">Alton Brown's Buff Smoothie</div>
+    <div class="card-desc">A fruity dairy-free antioxidant smoothie with acai, banana, blueberries, and peaches.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">2 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">1</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-meat_mains">
+  <div class="cat-header">
+    <div class="cat-title">Meat Mains</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">9 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('meat_mains','Beef')">Beef</button><button class="lpill" onclick="jumpToIng('meat_mains','Pork')">Pork</button><button class="lpill" onclick="jumpToIng('meat_mains','Sandwich')">Sandwich</button><button class="lpill" onclick="jumpToIng('meat_mains','Sausage')">Sausage</button><button class="lpill" onclick="jumpToIng('meat_mains','Soup')">Soup</button><button class="lpill" onclick="jumpToIng('meat_mains','Tacos')">Tacos</button><button class="lpill" onclick="jumpToIng('meat_mains','Turkey')">Turkey</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-meat_mains"><a class="card" href="Meat-Mains/carnitas.html" data-tags="Slow Cooker,Gluten Free,Favorite" data-ingredient="Pork" data-title="authentic mexican pork carnitas" data-desc="slow cooker pulled pork finished under the broiler for incredible crispy edges.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag fav">Favorite</span><span class="card-tag ">Slow Cooker</span><span class="card-tag health">Gluten Free</span><span class="card-tag fav">Favorite</span></div>
+    <div class="card-title">Authentic Mexican Pork Carnitas</div>
+    <div class="card-desc">Slow cooker pulled pork finished under the broiler for incredible crispy edges.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">6 hrs</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">12</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/chorizo-tacos.html" data-tags="Quick,Comfort Food" data-ingredient="Tacos" data-title="chorizo street tacos" data-desc="chorizo cooked with potato chunks and black beans, topped with melted cheese in warm tortillas.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag ">Comfort Food</span></div>
+    <div class="card-title">Chorizo Street Tacos</div>
+    <div class="card-desc">Chorizo cooked with potato chunks and black beans, topped with melted cheese in warm tortillas.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">25 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/pork-loins.html" data-tags="Quick,Gluten Free" data-ingredient="Pork" data-title="dominick's lemon paprika pork loins over veggies" data-desc="pork loins with paprika and lemon pepper over sauteed asparagus and mushrooms.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag health">Gluten Free</span></div>
+    <div class="card-title">Dominick's Lemon Paprika Pork Loins over Veggies</div>
+    <div class="card-desc">Pork loins with paprika and lemon pepper over sauteed asparagus and mushrooms.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/slow-cooker-pork.html" data-tags="Slow Cooker,Gluten Free" data-ingredient="Pork" data-title="garlic and herb slow cooker pork and vegetables" data-desc="hands-off slow cooker meal with garlic herb pork sirloin over carrots, potatoes, and onion.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Slow Cooker</span><span class="card-tag health">Gluten Free</span></div>
+    <div class="card-title">Garlic and Herb Slow Cooker Pork and Vegetables</div>
+    <div class="card-desc">Hands-off slow cooker meal with garlic herb pork sirloin over carrots, potatoes, and onion.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">4 hrs</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/french-dip.html" data-tags="Slow Cooker,Comfort Food" data-ingredient="Sandwich" data-title="holly's crockpot french dip" data-desc="tender round steak slow-cooked in rich broth with portobello mushrooms, served on a crusty roll.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Slow Cooker</span><span class="card-tag ">Comfort Food</span></div>
+    <div class="card-title">Holly's Crockpot French Dip</div>
+    <div class="card-desc">Tender round steak slow-cooked in rich broth with portobello mushrooms, served on a crusty roll.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">3 hrs</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/loco-moco.html" data-tags="Hawaiian,Comfort Food,Quick" data-ingredient="Beef" data-title="loco moco" data-desc="a traditional hawaiian dish with beef patties, rice, fried eggs, and savory gravy.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Hawaiian</span><span class="card-tag ">Comfort Food</span><span class="card-tag ">Quick</span></div>
+    <div class="card-title">Loco Moco</div>
+    <div class="card-desc">A traditional Hawaiian dish with beef patties, rice, fried eggs, and savory gravy.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Great for meal prep">&#128197;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/brussels-sausage.html" data-tags="Quick,Gluten Free" data-ingredient="Sausage" data-title="sheet-pan sausages and brussels sprouts with honey mustard" data-desc="honey mustard-glazed sausages roasted with caramelized brussels sprouts and baby potatoes.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Quick</span><span class="card-tag health">Gluten Free</span></div>
+    <div class="card-title">Sheet-Pan Sausages and Brussels Sprouts with Honey Mustard</div>
+    <div class="card-desc">Honey mustard-glazed sausages roasted with caramelized Brussels sprouts and baby potatoes.</div>
+    <div class="card-icons"><span class="card-icon" title="Under 30 minutes">&#9201;</span><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Great for meal prep">&#128197;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">5 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">25 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/turkey-meatballs.html" data-tags="Comfort Food,Favorite" data-ingredient="Turkey" data-title="spicy turkey meatballs" data-desc="huge baseball-sized turkey and pork meatballs with prosciutto and asiago, baked golden in marinara.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag fav">Favorite</span><span class="card-tag ">Comfort Food</span><span class="card-tag fav">Favorite</span></div>
+    <div class="card-title">Spicy Turkey Meatballs</div>
+    <div class="card-desc">Huge baseball-sized turkey and pork meatballs with prosciutto and Asiago, baked golden in marinara.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for meal prep">&#128197;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">40 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">8</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Meat-Mains/zuppa-toscana.html" data-tags="Slow Cooker,Gluten Free" data-ingredient="Soup" data-title="zuppa toscana with jeweled yams" data-desc="rich slow cooker soup with ground pork sausage, sweet potatoes, kale, and cream.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#e8a020,#d4607a)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Slow Cooker</span><span class="card-tag health">Gluten Free</span></div>
+    <div class="card-title">Zuppa Toscana with Jeweled Yams</div>
+    <div class="card-desc">Rich slow cooker soup with ground pork sausage, sweet potatoes, kale, and cream.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for meal prep">&#128197;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">8 hrs</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">6</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-breads_and_pizza">
+  <div class="cat-header">
+    <div class="cat-title">Breads and Pizza</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">2 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('breads_and_pizza','Bread')">Bread</button><button class="lpill" onclick="jumpToIng('breads_and_pizza','Pizza')">Pizza</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-breads_and_pizza"><a class="card" href="Breads-Pizza/cinnamon-raisin-challah.html" data-tags="Baking" data-ingredient="Bread" data-title="cinnamon raisin swirl challah" data-desc="a beautifully braided challah with a sweet cinnamon sugar and raisin swirl through every strand.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#b07d10,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Baking</span></div>
+    <div class="card-title">Cinnamon Raisin Swirl Challah</div>
+    <div class="card-desc">A beautifully braided challah with a sweet cinnamon sugar and raisin swirl through every strand.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">45 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">40 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">24 slices</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Vegetarian/margarita-pizza.html" data-tags="Vegetarian,Baking,Favorite" data-ingredient="Pizza" data-title="margarita pizza" data-desc="hand-stretched garlicky dough, raw sliced garlic, fresh mozzarella, campari tomatoes, and basil.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#b07d10,#e8a020)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag fav">Favorite</span><span class="card-tag veg">Vegetarian</span><span class="card-tag ">Baking</span><span class="card-tag fav">Favorite</span></div>
+    <div class="card-title">Margarita Pizza</div>
+    <div class="card-desc">Hand-stretched garlicky dough, raw sliced garlic, fresh mozzarella, Campari tomatoes, and basil.</div>
+    <div class="card-icons"><span class="card-icon" title="Low effort / ADHD friendly">&#x1F944;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Serves</span><span class="card-meta-val">4</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-baking">
+  <div class="cat-header">
+    <div class="cat-title">Baking</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">4 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('baking','Biscotti')">Biscotti</button><button class="lpill" onclick="jumpToIng('baking','Bread')">Bread</button><button class="lpill" onclick="jumpToIng('baking','Cookie')">Cookie</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-baking"><a class="card" href="Baking-Desserts/biscotti.html" data-tags="Baking" data-ingredient="Biscotti" data-title="dark chocolate hazelnut biscotti" data-desc="double-baked biscotti with toasted hazelnuts, dark chocolate, and espresso.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Baking</span></div>
+    <div class="card-title">Dark Chocolate Hazelnut Biscotti</div>
+    <div class="card-desc">Double-baked biscotti with toasted hazelnuts, dark chocolate, and espresso.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">30 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">1 hr 10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">24</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/snickerdoodles.html" data-tags="Baking" data-ingredient="Cookie" data-title="snickerdoodles for susan" data-desc="classic soft snickerdoodles with a crinkly cinnamon sugar crust and chewy center.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Baking</span></div>
+    <div class="card-title">Snickerdoodles for Susan</div>
+    <div class="card-desc">Classic soft snickerdoodles with a crinkly cinnamon sugar crust and chewy center.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">48</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/oatmeal-raisin-cookies.html" data-tags="Baking" data-ingredient="Cookie" data-title="susan's oatmeal raisin cookies" data-desc="soft hearty oatmeal raisin cookies loaded with double the raisins. a family classic.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Baking</span></div>
+    <div class="card-title">Susan's Oatmeal Raisin Cookies</div>
+    <div class="card-desc">Soft hearty oatmeal raisin cookies loaded with double the raisins. A family classic.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">15 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">24</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/zucchini-bread.html" data-tags="Baking" data-ingredient="Bread" data-title="zucchini bread" data-desc="warmly spiced bread with cinnamon, nutmeg, and clove, studded with raisins and granny smith apple.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Baking</span></div>
+    <div class="card-title">Zucchini Bread</div>
+    <div class="card-desc">Warmly spiced bread with cinnamon, nutmeg, and clove, studded with raisins and Granny Smith apple.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Garden fresh ingredients">&#127807;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">1 hr</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">2 loaves</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="category" id="cat-desserts">
+  <div class="cat-header">
+    <div class="cat-title">Desserts</div>
+    <div class="cat-line"></div>
+    <div class="cat-count">4 Recipes</div>
+  </div>
+  <div class="lnav-wrap">
+    <button class="lnav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Jump to ingredient <span>&#9662;</span></button>
+    <div class="lnav-drawer"><span class="lnav-label">Tap to jump to that ingredient</span><div class="lpills"><button class="lpill" onclick="jumpToIng('desserts','Bars')">Bars</button><button class="lpill" onclick="jumpToIng('desserts','Cake')">Cake</button><button class="lpill" onclick="jumpToIng('desserts','Cookie')">Cookie</button><button class="lpill" onclick="jumpToIng('desserts','Cupcake')">Cupcake</button></div></div>
+  </div>
+  <div class="cards-grid" id="grid-desserts"><a class="card" href="Baking-Desserts/cranberry-lemon-bars.html" data-tags="Dessert" data-ingredient="Bars" data-title="cranberry lemon bars" data-desc="two-toned lemon bars with a jammy cranberry layer and buttery vanilla cookie crust.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Dessert</span></div>
+    <div class="card-title">Cranberry Lemon Bars</div>
+    <div class="card-desc">Two-toned lemon bars with a jammy cranberry layer and buttery vanilla cookie crust.</div>
+    <div class="card-icons"><span class="card-icon" title="Pack / bike friendly">&#128690;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">40 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">24 bars</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/german-chocolate-cupcakes.html" data-tags="Dessert" data-ingredient="Cupcake" data-title="german chocolate cupcakes" data-desc="rich moist german chocolate cupcakes topped with classic coconut pecan frosting.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Dessert</span></div>
+    <div class="card-title">German Chocolate Cupcakes</div>
+    <div class="card-desc">Rich moist German chocolate cupcakes topped with classic coconut pecan frosting.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">20 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">30 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">24</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/black-cake.html" data-tags="Dessert,Caribbean" data-ingredient="Cake" data-title="susan james' jamaican black cake" data-desc="a rich caribbean fruit cake soaked in rum, brandy, and wine. a treasured celebration recipe.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag ">Dessert</span><span class="card-tag ">Caribbean</span></div>
+    <div class="card-title">Susan James' Jamaican Black Cake</div>
+    <div class="card-desc">A rich Caribbean fruit cake soaked in rum, brandy, and wine. A treasured celebration recipe.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">30 min + soaking</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">1 hr+</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">16</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a>
+<a class="card" href="Baking-Desserts/chocolate-chip-cookies.html" data-tags="Dessert,Favorite" data-ingredient="Cookie" data-title="the best chocolate chip cookies" data-desc="no chilling, no funny ingredients — a perfect doughy crispy-edged cookie every single time.">
+  <div class="card-accent" style="height:5px;background:linear-gradient(to right,#d4607a,#f5c860)"></div>
+  <div class="card-body">
+    <div class="card-tags"><span class="card-tag fav">Favorite</span><span class="card-tag ">Dessert</span><span class="card-tag fav">Favorite</span></div>
+    <div class="card-title">The Best Chocolate Chip Cookies</div>
+    <div class="card-desc">No chilling, no funny ingredients — a perfect doughy crispy-edged cookie every single time.</div>
+    <div class="card-icons"><span class="card-icon" title="Freezer friendly">&#10052;</span><span class="card-icon" title="Pack / bike friendly">&#128690;</span><span class="card-icon" title="Great for game night">&#127918;</span></div>
+    <div class="card-meta">
+      <div class="card-meta-item"><span class="card-meta-label">Prep</span><span class="card-meta-val">10 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Cook</span><span class="card-meta-val">8 min</span></div>
+      <div class="card-meta-item"><span class="card-meta-label">Makes</span><span class="card-meta-val">36 cookies</span></div>
+    </div>
+    <div class="card-arrow">Open recipe</div>
+  </div>
+</a></div>
+</div><div class="garden-section" id="garden-section">
+  <div class="cat-header">
+    <div class="cat-title">Our Garden</div>
+    <div class="cat-line"></div>
+    <div class="cat-count" id="garden-count">Tap ingredients to filter</div>
+  </div>
+  <div class="garden-controls">
+    <div class="garden-status" id="garden-status">Select one or more ingredients, then tap Show Recipes</div>
+    <div class="garden-btns">
+      <div class="mode-toggle">
+        <button id="mode-any" class="mode-btn active" onclick="setGardenMode('any')">Any</button>
+        <button id="mode-all" class="mode-btn" onclick="setGardenMode('all')">All</button>
+      </div>
+      <button id="garden-show" class="show-btn" onclick="showGardenResults()">Show Recipes &#8593;</button>
+      <button id="garden-clear" class="clear-btn" onclick="clearGarden()">Clear</button>
+    </div>
+  </div>
+  <div class="garden-group-lbl"><span class="gdot" style="background:#e8a020"></span> Planting soon</div>
+  <div class="ggrid"><div class="gitem" data-gname="Parsley" onclick="toggleGarden('Parsley')"><span class="gemoji">🌿</span><div class="gname">Parsley</div><div class="gcount">2 recipes</div></div><div class="gitem" data-gname="Cilantro" onclick="toggleGarden('Cilantro')"><span class="gemoji">🌿</span><div class="gname">Cilantro</div><div class="gcount">3 recipes</div></div><div class="gitem" data-gname="Zucchini" onclick="toggleGarden('Zucchini')"><span class="gemoji">🥒</span><div class="gname">Zucchini</div><div class="gcount">2 recipes</div></div><div class="gitem" data-gname="Summer Squash" onclick="toggleGarden('Summer Squash')"><span class="gemoji">🌽</span><div class="gname">Summer Squash</div><div class="gcount">1 recipe</div></div><div class="gitem gitem-none" data-gname="Beets" ><span class="gemoji">🌱</span><div class="gname">Beets</div><div class="gcount">no recipes yet</div></div><div class="gitem gitem-none" data-gname="Peas" ><span class="gemoji">🟢</span><div class="gname">Peas</div><div class="gcount">no recipes yet</div></div><div class="gitem gitem-none" data-gname="Sage" ><span class="gemoji">🌿</span><div class="gname">Sage</div><div class="gcount">no recipes yet</div></div></div>
+  <div class="garden-group-lbl" style="margin-top:1rem"><span class="gdot" style="background:#4a7c59"></span> Coming later this season</div>
+  <div class="ggrid"><div class="gitem" data-gname="Garlic" onclick="toggleGarden('Garlic')"><span class="gemoji">🧄</span><div class="gname">Garlic</div><div class="gcount">8 recipes</div></div><div class="gitem" data-gname="Heirloom Tomatoes" onclick="toggleGarden('Heirloom Tomatoes')"><span class="gemoji">🍅</span><div class="gname">Heirloom Tomatoes</div><div class="gcount">5 recipes</div></div><div class="gitem" data-gname="Broccolini" onclick="toggleGarden('Broccolini')"><span class="gemoji">🥦</span><div class="gname">Broccolini</div><div class="gcount">2 recipes</div></div><div class="gitem" data-gname="Cauliflower" onclick="toggleGarden('Cauliflower')"><span class="gemoji">🥦</span><div class="gname">Cauliflower</div><div class="gcount">2 recipes</div></div><div class="gitem" data-gname="Basil" onclick="toggleGarden('Basil')"><span class="gemoji">🌿</span><div class="gname">Basil</div><div class="gcount">2 recipes</div></div><div class="gitem gitem-none" data-gname="Jalapeños" ><span class="gemoji">🌶️</span><div class="gname">Jalapeños</div><div class="gcount">no recipes yet</div></div><div class="gitem" data-gname="Thyme" onclick="toggleGarden('Thyme')"><span class="gemoji">🌿</span><div class="gname">Thyme</div><div class="gcount">1 recipe</div></div><div class="gitem" data-gname="Oregano" onclick="toggleGarden('Oregano')"><span class="gemoji">🌿</span><div class="gname">Oregano</div><div class="gcount">2 recipes</div></div><div class="gitem gitem-none" data-gname="Dill" ><span class="gemoji">🌿</span><div class="gname">Dill</div><div class="gcount">no recipes yet</div></div></div>
+  <div class="garden-key">
+    <span class="gkey-item"><span class="gdot" style="background:#e8a020"></span> Planting soon</span>
+    <span class="gkey-item"><span class="gdot" style="background:#4a7c59"></span> Coming later</span>
+    <span class="gkey-item" style="opacity:0.5">Greyed out = no recipes yet</span>
+  </div>
+</div>
+</div>
+
+<div class="no-results" id="no-results">No recipes found — try a different search or filter.</div>
+<div class="footer">Built with love by Dragon Half Art &mdash; making cooking more accessible, one recipe at a time &#127869;</div>
+
+<div class="popup-bg" id="meal-popup" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="popup-box">
+    <div class="popup-title">&#127358; Plan your week with Claude</div>
+    <div class="popup-desc">Copy this template, open Claude.ai, paste it in and describe your week. Claude will pull from your recipe library and build a full plan with a grocery list.</div>
+    <div class="popup-template" id="meal-template">My recipe archive: ssoltau13570.github.io/Myrecipes
+
+Help me meal plan for the week.
+- Energy level: [low / medium / high]
+- Health focus: [GERD / PCOS / anti-inflammatory / none]
+- Budget: [tight / moderate / flexible]
+- Workouts this week: [cardio / strength / yoga / rest]
+- Number of meals: [3 / 5 / 7]
+- Notes: [what's in the fridge, preferences, health]</div>
+    <div class="popup-btns">
+      <button class="popup-btn" onclick="document.getElementById('meal-popup').classList.remove('open')">Close</button>
+      <button class="popup-btn go" id="copy-btn" onclick="copyTemplate()">Copy template</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GARDEN_LOOKUP = {"Parsley": ["Horseradish Parmesan Crusted Salmon", "Spicy Turkey Meatballs"], "Cilantro": ["Turmeric Coconut Braised Cabbage with Chickpeas", "Authentic Mexican Pork Carnitas", "Chorizo Street Tacos"], "Zucchini": ["Zucchini Bread", "Lynne's Oven-Roasted Vegetables"], "Summer Squash": ["Lynne's Oven-Roasted Vegetables"], "Garlic": ["Margarita Pizza", "Turmeric Coconut Braised Cabbage with Chickpeas", "Garlic and Herb Slow Cooker Pork and Vegetables", "Dominick's Lemon Paprika Pork Loins over Veggies", "Broccoli and Feta Salad", "Saucy Portabella Pitas", "Cheesy White Bean-Tomato Bake", "Sheet-Pan Baked Feta with Broccolini and Tomatoes"], "Heirloom Tomatoes": ["Margarita Pizza", "Sheet-Pan Baked Feta with Broccolini and Tomatoes", "Broccoli and Feta Salad", "Saucy Portabella Pitas", "Cheesy White Bean-Tomato Bake"], "Broccolini": ["Sheet-Pan Baked Feta with Broccolini and Tomatoes", "Baked Salmon with Roasted Charred Veggie Medley"], "Cauliflower": ["Lynne's Oven-Roasted Vegetables", "Baked Salmon with Roasted Charred Veggie Medley"], "Basil": ["Margarita Pizza", "Sheet-Pan Baked Feta with Broccolini and Tomatoes"], "Thyme": ["Lynne's Oven-Roasted Vegetables"], "Oregano": ["Authentic Mexican Pork Carnitas", "Margarita Pizza"]};
+const DIETARY = ["Favorite","Vegetarian","Vegan","Gluten Free","GERD Friendly","PCOS Friendly"];
+const LIFESTYLE = ["Quick","Slow Cooker","Comfort Food","Baking","Dessert"];
+const CUISINE = ["Caribbean","Hawaiian"];
+let activeFilters = new Set();
+let drawerOpen = false;
+let gardenSelected = new Set();
+let gardenMode = 'any';
+
+function buildFilters() {
+  function row(tags, id) {
+    document.getElementById(id).innerHTML = tags.map(t =>
+      '<button class="fbtn'+(t==="Favorite"?" fav-btn":"")+'" data-tag="'+t+'" onclick="toggleFilter(this)">'+t+'</button>'
+    ).join('');
+  }
+  row(DIETARY,'frow-dietary'); row(LIFESTYLE,'frow-lifestyle'); row(CUISINE,'frow-cuisine');
+}
+
+function toggleFilter(btn) {
+  const t = btn.dataset.tag;
+  activeFilters.has(t) ? (activeFilters.delete(t),btn.classList.remove('active')) : (activeFilters.add(t),btn.classList.add('active'));
+  updateFilterUI(); applyFilters();
+}
+function clearFilters() {
+  activeFilters.clear(); document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active')); updateFilterUI(); applyFilters();
+}
+function updateFilterUI() {
+  const c = activeFilters.size;
+  document.getElementById('fcount').textContent = c>0?'('+c+')':'';
+  document.getElementById('ftoggle').classList.toggle('active',c>0);
+  document.getElementById('fclear').classList.toggle('vis',c>0);
+}
+function toggleFilters() {
+  drawerOpen=!drawerOpen; document.getElementById('fdrawer').classList.toggle('open',drawerOpen);
+}
+function doSearch() { applyFilters(); }
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  let any = false;
+  document.querySelectorAll('.card').forEach(card => {
+    const tags = (card.dataset.tags||'').split(',');
+    const title = card.dataset.title||'';
+    const desc = card.dataset.desc||'';
+    const mf = activeFilters.size===0 || [...activeFilters].every(f=>tags.includes(f));
+    const ms = !q || title.includes(q) || desc.includes(q) || tags.some(t=>t.toLowerCase().includes(q));
+    const show = mf && ms;
+    card.classList.toggle('hidden',!show);
+    if(show) any=true;
+  });
+  document.querySelectorAll('.category').forEach(cat=>{
+    cat.classList.toggle('hidden',cat.querySelectorAll('.card:not(.hidden)').length===0);
+  });
+  document.getElementById('no-results').style.display=any?'none':'block';
+}
+
+function seasonalSearch(term) {
+  document.getElementById('search').value=term; applyFilters();
+  window.scrollTo({top:document.getElementById('main').offsetTop-80,behavior:'smooth'});
+}
+
+function jumpToIng(cs, ing) {
+  const grid = document.getElementById('grid-'+cs);
+  if(!grid) return;
+  const card = grid.querySelector('[data-ingredient="'+ing+'"]:not(.hidden)');
+  if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function scrollToGarden() {
+  document.getElementById('garden-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// GARDEN — completely isolated from card filtering until Show Recipes is tapped
+function setGardenMode(m) {
+  gardenMode = m;
+  document.getElementById('mode-any').classList.toggle('active',m==='any');
+  document.getElementById('mode-all').classList.toggle('active',m==='all');
+  refreshGardenCount();
+}
+
+function toggleGarden(name) {
+  const el = document.querySelector('[data-gname="'+name+'"]');
+  if(!el) return;
+  gardenSelected.has(name) ? (gardenSelected.delete(name),el.classList.remove('selected')) : (gardenSelected.add(name),el.classList.add('selected'));
+  refreshGardenCount();
+}
+
+function refreshGardenCount() {
+  const count = gardenSelected.size;
+  const showBtn = document.getElementById('garden-show');
+  const clearBtn = document.getElementById('garden-clear');
+  const status = document.getElementById('garden-status');
+  const counter = document.getElementById('garden-count');
+
+  if(count===0) {
+    showBtn.style.display='none'; clearBtn.style.display='none';
+    status.textContent='Select one or more ingredients, then tap Show Recipes';
+    counter.textContent='Tap ingredients to filter';
+    return;
+  }
+
+  showBtn.style.display='inline-block'; clearBtn.style.display='inline-block';
+
+  // Count silently — NEVER touch card visibility here
+  const matchTitles = getMatchingTitles();
+  let matchCount = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const t = (card.dataset.title||'').toLowerCase();
+    if(matchTitles.some(m => t.includes(m.substring(0,20)))) matchCount++;
+  });
+
+  const names = [...gardenSelected].join(' + ');
+  const modeWord = gardenMode==='any' ? 'using any' : 'using all';
+  status.textContent = 'Selected: ' + names;
+  counter.textContent = matchCount + ' match' + (matchCount!==1?'es':'') + ' — ' + modeWord;
+}
+
+function getMatchingTitles() {
+  if(gardenMode==='any') {
+    const set = new Set();
+    gardenSelected.forEach(ing => (GARDEN_LOOKUP[ing]||[]).forEach(t=>set.add(t.toLowerCase())));
+    return [...set];
+  } else {
+    const lists = [...gardenSelected].map(ing=>(GARDEN_LOOKUP[ing]||[]).map(t=>t.toLowerCase()));
+    if(!lists.length) return [];
+    return lists[0].filter(t=>lists.every(list=>list.includes(t)));
+  }
+}
+
+function showGardenResults() {
+  if(gardenSelected.size===0) return;
+  const matchTitles = getMatchingTitles();
+  let any = false;
+  document.querySelectorAll('.card').forEach(card => {
+    const t = (card.dataset.title||'').toLowerCase();
+    const show = matchTitles.some(m=>t.includes(m.substring(0,20)));
+    card.classList.toggle('hidden',!show);
+    if(show) any=true;
+  });
+  document.querySelectorAll('.category').forEach(cat=>{
+    if(cat.id==='garden-section') return;
+    cat.classList.toggle('hidden',cat.querySelectorAll('.card:not(.hidden)').length===0);
+  });
+  document.getElementById('no-results').style.display=any?'none':'block';
+  window.scrollTo({top:document.getElementById('main').offsetTop-80,behavior:'smooth'});
+}
+
+function clearGarden() {
+  gardenSelected.clear();
+  document.querySelectorAll('[data-gname]').forEach(el=>el.classList.remove('selected'));
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('hidden'));
+  document.querySelectorAll('.category').forEach(cat=>cat.classList.remove('hidden'));
+  document.getElementById('no-results').style.display='none';
+  refreshGardenCount();
+}
+
+function copyTemplate() {
+  const text = document.getElementById('meal-template').textContent;
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn=document.getElementById('copy-btn'); btn.textContent='Copied!';
+      setTimeout(()=>btn.textContent='Copy template',2000);
+    });
+  }
+}
+
+buildFilters();
+</script>
+</body>
+</html>
